@@ -12,46 +12,34 @@ import ru.practicum.shareit.user.model.User;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Component("userMemoryStorage")
 public class MemoryUserStorageImpl implements UserStorage {
 
-    @Autowired
-    private UserMapper mapper;
     private long userId = 1;
     private Map<Long, User> users = new HashMap<>();
 
-    private long generateId() {
-        return userId++;
-    }
-
-    private void emailExistCheck(UserDto dto) {
-        log.info("Метод emailExistCheck, объект {}", dto);
-            users.values().forEach(mapUser -> {
-                        if (mapUser.getEmail().equals(dto.getEmail())) {
-                            log.error("Пользователь с указанным email = {} уже существует", dto.getEmail());
-                            throw new ConflictException("Пользователь с указанным email существует");
-                        }
-                    }
-            );
-    }
-
     @Override
-    public UserDto create(UserDto dto) {
-        emailExistCheck(dto);
+    public User create(User user) {
+        emailExistCheck(user);
 
         long id = generateId();
-        User user = mapper.mapDtoToUserNewId(dto, id);
+        user = User.builder()
+                .id(id)
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
 
         users.put(id, user);
-        return mapper.mapUserToDto(user);
+        return user;
     }
 
     @Override
-    public UserDto update(UserDto dto, Long id) {
-        if (dto.getEmail() != null) {
-            emailExistCheck(dto);
+    public User update(User user, Long id) {
+        if (user.getEmail() != null) {
+            emailExistCheck(user);
         }
 
         if (!users.containsKey(id)) {
@@ -59,10 +47,8 @@ public class MemoryUserStorageImpl implements UserStorage {
             throw new NotFoundException("Обновляемый пользователь не существует");
         }
 
-        User user = mapper.mapDtoToUserUpdate(users.get(id), dto, id);
         users.put(id, user);
-
-        return mapper.mapUserToDto(user);
+        return user;
     }
 
     @Override
@@ -71,18 +57,31 @@ public class MemoryUserStorageImpl implements UserStorage {
     }
 
     @Override
-    public List<UserDto> findAll() {
-        return users.values()
-                .stream()
-                .map(user -> mapper.mapUserToDto(user))
-                .toList();
+    public List<User> findAll() {
+        return users.values().stream().toList();
     }
 
     @Override
-    public UserDto findById(Long id) {
+    public User findById(Long id) {
         if (!users.containsKey(id)) {
             throw new NotFoundException("Пользователь с id = " + id + " не существует");
         }
-        return mapper.mapUserToDto(users.get(id));
+        return users.get(id);
     }
+
+    private long generateId() {
+        return userId++;
+    }
+
+    private void emailExistCheck(User user) {
+        log.info("Метод emailExistCheck, объект {}", user);
+        users.values().forEach(mapUser -> {
+                    if (mapUser.getEmail().equals(user.getEmail()) && !Objects.equals(mapUser.getId(), user.getId())) {
+                        log.error("Пользователь с указанным email = {} уже существует", user.getEmail());
+                        throw new ConflictException("Пользователь с указанным email существует");
+                    }
+                }
+        );
+    }
+
 }
