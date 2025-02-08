@@ -2,12 +2,8 @@ package ru.practicum.shareit.user.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.Builder;
 import lombok.Value;
-import ru.practicum.shareit.annotation.NotSpaces;
-
-import java.time.LocalDate;
 
 @Value
 @Builder(toBuilder = true)
