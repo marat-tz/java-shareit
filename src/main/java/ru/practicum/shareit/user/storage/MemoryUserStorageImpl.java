@@ -74,7 +74,6 @@ public class MemoryUserStorageImpl implements UserStorage {
     }
 
     private void emailExistCheck(User user) {
-        log.info("Метод emailExistCheck, объект {}", user);
         users.values().forEach(mapUser -> {
                     if (mapUser.getEmail().equals(user.getEmail()) && !Objects.equals(mapUser.getId(), user.getId())) {
                         log.error("Пользователь с указанным email = {} уже существует", user.getEmail());
