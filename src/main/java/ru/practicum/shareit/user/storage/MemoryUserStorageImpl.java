@@ -23,6 +23,7 @@ public class MemoryUserStorageImpl implements UserStorage {
 
     @Override
     public User create(User user) {
+        log.info("Создание нового пользователя = {}", user);
         emailExistCheck(user);
 
         long id = generateId();
@@ -38,6 +39,7 @@ public class MemoryUserStorageImpl implements UserStorage {
 
     @Override
     public User update(User user, Long id) {
+        log.info("Обновление пользователя с id = {}", id);
         if (user.getEmail() != null) {
             emailExistCheck(user);
         }
@@ -53,16 +55,19 @@ public class MemoryUserStorageImpl implements UserStorage {
 
     @Override
     public void delete(Long id) {
+        log.info("Удаление пользователя с id = {}", id);
         users.remove(id);
     }
 
     @Override
     public List<User> findAll() {
+        log.info("Получение всех пользователей");
         return users.values().stream().toList();
     }
 
     @Override
     public User findById(Long id) {
+        log.info("Получение пользователя с id = {}", id);
         if (!users.containsKey(id)) {
             throw new NotFoundException("Пользователь с id = " + id + " не существует");
         }

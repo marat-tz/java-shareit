@@ -32,7 +32,6 @@ public class MemoryItemServiceImpl implements ItemService {
         return ItemMapper.mapItemToDto(item);
     }
 
-    // TODO: упростить, избавиться от условий - можно заранее прописать подходящие мапперы
     @Override
     public ItemDto update(ItemDto dto, Long id, Long userId) {
         Item item = storage.findById(id);
