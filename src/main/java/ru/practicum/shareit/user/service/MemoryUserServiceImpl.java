@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ValidationException;
@@ -58,8 +57,6 @@ public class MemoryUserServiceImpl implements UserService {
 
         return UserMapper.mapUserToDto(storage.update(user, id));
     }
-
-
 
     @Override
     public void delete(Long id) {
