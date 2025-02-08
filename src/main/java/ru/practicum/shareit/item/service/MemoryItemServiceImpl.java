@@ -111,17 +111,23 @@ public class MemoryItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto findById(Long id) {
-        return null;
+        return ItemMapper.mapItemToDto(storage.findById(id));
     }
 
     @Override
     public List<ItemDto> findAllByUserId(Long id) {
-        return null;
+        return storage.findAllByUserId(id)
+                .stream()
+                .map(ItemMapper::mapItemToDto)
+                .toList();
     }
 
     @Override
     public List<ItemDto> findByText(String text) {
-        return null;
+        return storage.findByText(text)
+                .stream()
+                .map(ItemMapper::mapItemToDto)
+                .toList();
     }
 
     @Override

@@ -14,6 +14,7 @@ import ru.practicum.shareit.user.service.UserService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component("itemMemoryStorage")
 public class MemoryItemStorageImpl implements ItemStorage {
@@ -61,12 +62,20 @@ public class MemoryItemStorageImpl implements ItemStorage {
 
     @Override
     public List<Item> findAllByUserId(Long id) {
-        return null;
+        return items.values()
+                .stream()
+                .filter(item -> Objects.equals(item.getOwner().getId(), id))
+                .toList();
     }
 
     @Override
     public List<Item> findByText(String text) {
-        return null;
+        return items.values()
+                .stream()
+                .filter(item -> !text.isBlank() &&
+                        item.getName().toUpperCase().contains(text)
+                        && Objects.equals(item.getAvailable(), true))
+                .toList();
     }
 
     @Override
