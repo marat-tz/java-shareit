@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.service;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -13,7 +14,7 @@ import ru.practicum.shareit.item.storage.ItemStorage;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+@Service
 public class MemoryItemServiceImpl implements ItemService {
 
     private final ItemStorage storage;
