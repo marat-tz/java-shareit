@@ -14,14 +14,13 @@ import ru.practicum.shareit.user.service.UserService;
 import java.util.List;
 import java.util.Objects;
 
-@Component("memoryItemService")
+@Component
 public class MemoryItemServiceImpl implements ItemService {
 
     private final ItemStorage storage;
     private final UserService userService;
 
-    public MemoryItemServiceImpl(@Qualifier("itemMemoryStorage") ItemStorage storage,
-                                 @Qualifier("memoryUserService") UserService userService) {
+    public MemoryItemServiceImpl(@Qualifier("itemMemoryStorage") ItemStorage storage, UserService userService) {
         this.storage = storage;
         this.userService = userService;
     }

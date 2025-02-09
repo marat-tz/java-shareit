@@ -13,7 +13,7 @@ import java.util.List;
 public class ItemController {
     private final ItemService service;
 
-    public ItemController(@Qualifier("memoryItemService") ItemService service) {
+    public ItemController(ItemService service) {
         this.service = service;
     }
 

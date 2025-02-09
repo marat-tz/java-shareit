@@ -12,7 +12,7 @@ import ru.practicum.shareit.user.storage.UserStorage;
 import java.util.List;
 
 @Slf4j
-@Service("memoryUserService")
+@Service
 public class MemoryUserServiceImpl implements UserService {
 
     private final UserStorage storage;
