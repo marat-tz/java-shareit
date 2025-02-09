@@ -41,61 +41,31 @@ public class MemoryItemServiceImpl implements ItemService {
         if (!StringUtils.isBlank(dto.getName())
                 && !StringUtils.isBlank(dto.getDescription())
                 && dto.getAvailable() != null) {
-            item = Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(dto.getName())
-                    .description(dto.getDescription())
-                    .available(dto.getAvailable())
-                    .build();
+            item = ItemMapper.mapNewItemAllFields(item, dto);
 
         // обновляем имя и описание
         } else if (!StringUtils.isBlank(dto.getName())
                 && !StringUtils.isBlank(dto.getDescription())
                 && dto.getAvailable() == null) {
-            item = Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(dto.getName())
-                    .description(dto.getDescription())
-                    .available(item.getAvailable())
-                    .build();
+            item = ItemMapper.mapNewItemNameDescription(item, dto);
 
         // обновляем имя
         } else if (!StringUtils.isBlank(dto.getName())
                 && StringUtils.isBlank(dto.getDescription())
                 && dto.getAvailable() == null) {
-            item = Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(dto.getName())
-                    .description(item.getDescription())
-                    .available(item.getAvailable())
-                    .build();
+            item = ItemMapper.mapNewItemName(item, dto);
 
         // обновляем доступность
         } else if (StringUtils.isBlank(dto.getName())
                 && StringUtils.isBlank(dto.getDescription())
                 && dto.getAvailable() != null) {
-            item = Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(item.getName())
-                    .description(item.getDescription())
-                    .available(dto.getAvailable())
-                    .build();
+            item = ItemMapper.mapNewItemAvailable(item, dto);
 
         // обновляем описание
         } else if (StringUtils.isBlank(dto.getName())
                 && !StringUtils.isBlank(dto.getDescription())
                 && dto.getAvailable() == null) {
-            item = Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(item.getName())
-                    .description(dto.getDescription())
-                    .available(item.getAvailable())
-                    .build();
+            item = ItemMapper.mapNewItemDescription(item, dto);
 
         } else {
             throw new ValidationException("Полученный объект обновляемой вещи не содержит полей");
