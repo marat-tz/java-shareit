@@ -84,6 +84,7 @@ public class MemoryItemStorageImpl implements ItemStorage {
 
     @Override
     public void delete(Long id) {
-
+        log.info("Удаление вещи с id = {}", id);
+        items.remove(id);
     }
 }

@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.service;
 
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
@@ -128,6 +127,6 @@ public class MemoryItemServiceImpl implements ItemService {
 
     @Override
     public void delete(Long id) {
-
+        storage.delete(id);
     }
 }
