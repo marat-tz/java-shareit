@@ -9,7 +9,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemStorage;
-import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,11 +17,9 @@ import java.util.Objects;
 public class MemoryItemServiceImpl implements ItemService {
 
     private final ItemStorage storage;
-    private final UserService userService;
 
-    public MemoryItemServiceImpl(@Qualifier("itemMemoryStorage") ItemStorage storage, UserService userService) {
+    public MemoryItemServiceImpl(@Qualifier("itemMemoryStorage") ItemStorage storage) {
         this.storage = storage;
-        this.userService = userService;
     }
 
     @Override
