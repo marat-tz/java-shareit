@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.mapper;
 
-import io.micrometer.common.util.StringUtils;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -63,6 +62,7 @@ public class ItemMapper {
                     .available(dto.getAvailable())
                     .build();
         }
+
     public Item mapNewItemDescription(Item item, ItemDto dto) {
             return Item.builder()
                     .id(item.getId())
