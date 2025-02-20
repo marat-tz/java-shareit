@@ -11,10 +11,10 @@ public interface ItemService {
 
     ItemDto findById(Long id);
 
-    List<ItemDto> findAllByUserId(Long id);
+    List<ItemDto> findByOwnerId(Long id);
 
     // TODO: только доступные для аренды вещи
-    List<ItemDto> findByText(String text);
+    List<ItemDto> findByNameContainingIgnoreCase(String text);
 
     void delete(Long id);
 }

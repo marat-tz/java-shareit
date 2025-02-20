@@ -26,8 +26,8 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> findAllByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return service.findAllByUserId(userId);
+    public List<ItemDto> findByOwnerId(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        return service.findByOwnerId(userId);
     }
 
     @GetMapping("/{id}")
@@ -36,8 +36,8 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> findByText(@RequestParam("text") String text) {
-        return service.findByText(text);
+    public List<ItemDto> findByNameContainingIgnoreCase(@RequestParam("text") String text) {
+        return service.findByNameContainingIgnoreCase(text);
     }
 
     @PostMapping
