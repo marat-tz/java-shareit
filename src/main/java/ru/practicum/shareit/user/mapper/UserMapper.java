@@ -13,27 +13,27 @@ import java.util.List;
 public class UserMapper {
 
     public User mapDtoToUser(UserDto dto) {
-        return User.builder()
-                .id(dto.getId())
-                .email(dto.getEmail())
-                .name(dto.getName())
-                .build();
+        User user = new User();
+        user.setId(dto.getId());
+        user.setEmail(dto.getEmail());
+        user.setName(dto.getName());
+        return user;
     }
 
     public User mapDtoToUser(UserDto dto, Long id) {
-        return User.builder()
-                .id(id)
-                .email(dto.getEmail())
-                .name(dto.getName())
-                .build();
+        User user = new User();
+        user.setId(id);
+        user.setEmail(dto.getEmail());
+        user.setName(dto.getName());
+        return user;
     }
 
     public UserDto mapUserToDto(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getName())
-                .build();
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setName(user.getName());
+        return dto;
     }
 
     public static List<UserDto> mapUserToDto(Iterable<User> users) {
