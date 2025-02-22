@@ -14,7 +14,7 @@ public interface ItemService {
     List<ItemDto> findByOwnerId(Long id);
 
     // TODO: только доступные для аренды вещи
-    List<ItemDto> findByNameContainingIgnoreCase(String text);
+    List<ItemDto> findByText(String text);
 
     void delete(Long id);
 }

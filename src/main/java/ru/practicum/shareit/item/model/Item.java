@@ -8,17 +8,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.model.User;
 
 @Entity
 @Table(name = "items")
-@Value
-@Builder(toBuilder = true)
+@Data
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Item {
 
     @Id

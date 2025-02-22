@@ -11,29 +11,29 @@ import java.util.List;
 @UtilityClass
 public class ItemMapper {
     public Item mapDtoToItem(ItemDto dto) {
-        return Item.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .available(dto.getAvailable())
-                .build();
+        Item item = new Item();
+        item.setName(dto.getName());
+        item.setDescription(dto.getDescription());
+        item.setAvailable(dto.getAvailable());
+        return item;
     }
 
     public Item mapDtoToItem(ItemDto dto, User owner) {
-        return Item.builder()
-                .owner(owner)
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .available(dto.getAvailable())
-                .build();
+        Item item = new Item();
+        item.setOwner(owner);
+        item.setName(dto.getName());
+        item.setDescription(dto.getDescription());
+        item.setAvailable(dto.getAvailable());
+        return item;
     }
 
     public ItemDto mapItemToDto(Item item) {
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
+        ItemDto dto = new ItemDto();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        dto.setAvailable(item.getAvailable());
+        return dto;
     }
 
     public static List<ItemDto> mapItemToDto(Iterable<Item> items) {
@@ -43,54 +43,4 @@ public class ItemMapper {
         }
         return dtos;
     }
-
-    public Item mapNewItemAllFields(Item item, ItemDto dto) {
-        return Item.builder()
-                .id(item.getId())
-                .owner(item.getOwner())
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .available(dto.getAvailable())
-                .build();
-    }
-
-    public Item mapNewItemNameDescription(Item item, ItemDto dto) {
-        return Item.builder()
-                .id(item.getId())
-                .owner(item.getOwner())
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .available(item.getAvailable())
-                .build();
-    }
-
-    public Item mapNewItemName(Item item, ItemDto dto) {
-        return Item.builder()
-                .id(item.getId())
-                .owner(item.getOwner())
-                .name(dto.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
-    }
-
-    public Item mapNewItemAvailable(Item item, ItemDto dto) {
-            return Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(item.getName())
-                    .description(item.getDescription())
-                    .available(dto.getAvailable())
-                    .build();
-        }
-
-    public Item mapNewItemDescription(Item item, ItemDto dto) {
-            return Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(item.getName())
-                    .description(dto.getDescription())
-                    .available(item.getAvailable())
-                    .build();
-        }
 }

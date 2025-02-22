@@ -36,8 +36,8 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> findByNameContainingIgnoreCase(@RequestParam("text") String text) {
-        return service.findByNameContainingIgnoreCase(text);
+    public List<ItemDto> findByText(@RequestParam("text") String text) {
+        return service.findByText(text);
     }
 
     @PostMapping

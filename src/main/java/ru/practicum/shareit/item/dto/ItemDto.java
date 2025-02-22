@@ -2,11 +2,14 @@ package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
+import lombok.experimental.FieldDefaults;
 
-@Value
-@Builder(toBuilder = true)
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemDto {
     Long id;
 
