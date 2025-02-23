@@ -19,6 +19,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserRepository;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,7 +86,7 @@ public class DbBookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDtoOut> findAllByUser(Long userId, State state) {
-        Instant now = Instant.now();
+        LocalDateTime now = LocalDateTime.now();
         List<Booking> result = switch (state) {
             case ALL -> bookingRepository.findAllByUserId(userId);
             case CURRENT -> bookingRepository.findAllByUserIdAndEndAfter(userId, now);

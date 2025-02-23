@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import ru.practicum.shareit.item.dto.CommentDtoIn;
+import ru.practicum.shareit.item.dto.CommentDtoOut;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
@@ -44,6 +47,15 @@ public class ItemController {
     public ItemDto create(@Valid @RequestBody ItemDto dto, @RequestHeader("X-Sharer-User-Id") Long userId) {
         return service.create(dto, userId);
     }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDtoOut addComment(@Valid @RequestBody CommentDtoIn dto, @PathVariable Long itemId,
+                                    @RequestHeader("X-Sharer-User-Id") Long userId) {
+        return service.addComment(dto, itemId, userId);
+    }
+
+    //Отзывы можно будет увидеть по двум эндпоинтам — по GET /items/{itemId} для одной конкретной вещи
+    // и по GET /items для всех вещей данного пользователя.
 
     @PatchMapping("/{id}")
     public ItemDto update(@RequestBody ItemDto newItem, @PathVariable("id") Long id,

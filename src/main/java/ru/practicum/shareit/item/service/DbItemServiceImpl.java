@@ -5,19 +5,29 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.enums.Status;
+import ru.practicum.shareit.booking.storage.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.dto.CommentDtoIn;
+import ru.practicum.shareit.item.dto.CommentDtoOut;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.storage.CommentRepository;
 import ru.practicum.shareit.item.storage.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,6 +37,8 @@ public class DbItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     @Transactional
@@ -37,6 +49,25 @@ public class DbItemServiceImpl implements ItemService {
         Item item = itemRepository.save(ItemMapper.mapDtoToItem(dto, owner));
         log.info("Вещь {} создана", item);
         return ItemMapper.mapItemToDto(item);
+    }
+
+    @Override
+    @Transactional
+    public CommentDtoOut addComment(CommentDtoIn dto, Long itemId, Long userId) {
+        User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь " +
+                "с id = " + userId + " не найден"));
+
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещь с id = " +
+                itemId + " не найдена"));
+
+        List<Booking> bookings = bookingRepository.findAllByUserIdAndItemIdAndEndBefore(userId, itemId,
+                LocalDateTime.now());
+        if (bookings.isEmpty()) {
+            throw new ValidationException("Пользователь " + userId + " не брал в аренду вещь " + itemId);
+        }
+
+        Comment comment = commentRepository.save(CommentMapper.mapDtoToComment(dto, owner, item));
+        return CommentMapper.mapCommentToDto(comment);
     }
 
     @Override
@@ -76,9 +107,28 @@ public class DbItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto findById(Long id) {
-        Item item = itemRepository.findById(id).orElseThrow();
-        return ItemMapper.mapItemToDto(item);
+    public ItemDto findById(Long itemId) {
+        Item item = itemRepository.findById(itemId).orElseThrow(()
+                -> new NotFoundException("Вещь " + itemId + " не найдена"));
+
+        BookingDtoOut lastBooking = null;
+        BookingDtoOut nextBooking = null;
+
+        List<Booking> lastBookings = bookingRepository.findAllByItemIdAndEndBeforeAndStatusOrderByEndDesc(itemId,
+                LocalDateTime.now(), Status.APPROVED);
+        if (!lastBookings.isEmpty()) {
+            lastBooking = BookingMapper.mapBookingToDto(lastBookings.get(0));
+        }
+
+        List<Booking> nextBookings = bookingRepository.findAllByItemIdAndStartAfterOrderByStartAsc(itemId,
+                LocalDateTime.now());
+        if (!nextBookings.isEmpty()) {
+            nextBooking = BookingMapper.mapBookingToDto(nextBookings.get(0));
+        }
+
+        List<CommentDtoOut> comments = CommentMapper.mapCommentToDto(commentRepository.findAllByItemId(itemId));
+
+        return ItemMapper.mapItemToDto(item, lastBooking, nextBooking, comments);
     }
 
     @Override
@@ -98,7 +148,6 @@ public class DbItemServiceImpl implements ItemService {
         List<Item> items = itemRepository.findByNameContainingIgnoreCase(text);
         items.addAll(itemRepository.findByDescriptionContainingIgnoreCase(text));
 
-        // TODO: можно отсеять всё ещё на этапе запроса
         List<Item> result = items
                 .stream()
                 .filter(Item::getAvailable)

@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.model.Booking;
+
+import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -21,4 +25,11 @@ public class ItemDto {
 
     @NotNull
     Boolean available;
+
+    BookingDtoOut lastBooking;
+
+    BookingDtoOut nextBooking;
+
+    List<CommentDtoOut> comments;
+
 }
