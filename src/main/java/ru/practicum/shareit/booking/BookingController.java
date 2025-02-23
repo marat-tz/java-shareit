@@ -39,13 +39,11 @@ public class BookingController {
         return bookingService.approve(bookingId, approved, userId);
     }
 
-    // выполняется либо автором бронирования, либо владельцем вещи
     @GetMapping("/{bookingId}")
     public BookingDtoOut findById(@PathVariable Long bookingId, @RequestHeader("X-Sharer-User-Id") Long userId) {
         return bookingService.findById(bookingId, userId);
     }
 
-    // сортировка от новых к старым
     @GetMapping
     public List<BookingDtoOut> findAllByUser(@RequestHeader("X-Sharer-User-Id") Long userId,
                                             @RequestParam(name = "state", defaultValue = "ALL") State state) {

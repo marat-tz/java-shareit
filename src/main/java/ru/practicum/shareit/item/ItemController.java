@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,19 +15,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import ru.practicum.shareit.item.dto.CommentDtoIn;
 import ru.practicum.shareit.item.dto.CommentDtoOut;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/items")
+@RequiredArgsConstructor
 public class ItemController {
     private final ItemService service;
-
-    public ItemController(ItemService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public List<ItemDto> findByOwnerId(@RequestHeader("X-Sharer-User-Id") Long userId) {
@@ -53,9 +50,6 @@ public class ItemController {
                                     @RequestHeader("X-Sharer-User-Id") Long userId) {
         return service.addComment(dto, itemId, userId);
     }
-
-    //Отзывы можно будет увидеть по двум эндпоинтам — по GET /items/{itemId} для одной конкретной вещи
-    // и по GET /items для всех вещей данного пользователя.
 
     @PatchMapping("/{id}")
     public ItemDto update(@RequestBody ItemDto newItem, @PathVariable("id") Long id,

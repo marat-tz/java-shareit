@@ -9,14 +9,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.model.User;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "items")

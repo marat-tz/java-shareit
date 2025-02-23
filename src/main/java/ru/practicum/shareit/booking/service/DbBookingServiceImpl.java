@@ -18,7 +18,6 @@ import ru.practicum.shareit.item.storage.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserRepository;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -33,8 +32,6 @@ public class DbBookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
-    // Запрос может быть создан любым пользователем, а затем подтверждён владельцем вещи
-    // После создания запрос находится в статусе WAITING — «ожидает подтверждения».
     @Override
     @Transactional
     public BookingDtoOut create(BookingDtoIn dto, Long userId) {
