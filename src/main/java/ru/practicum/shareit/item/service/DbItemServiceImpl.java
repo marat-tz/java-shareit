@@ -26,8 +26,11 @@ import ru.practicum.shareit.user.storage.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -134,7 +137,41 @@ public class DbItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> findByOwnerId(Long id) {
         List<Item> items = itemRepository.findByOwnerId(id);
-        return ItemMapper.mapItemToDto(items);
+        List<Long> itemIds = items.stream().map(Item::getId).toList();
+        List<Booking> bookings = bookingRepository.findAllByItemId(itemIds);
+        List<Comment> comments = commentRepository.findAllByItemId(itemIds);
+
+        Map<Long, List<Booking>> bookingsGroup = bookings
+                .stream()
+                .collect(Collectors.groupingBy(booking -> booking.getItem().getId()));
+
+        Map<Long, List<CommentDtoOut>> commentsGroup = comments
+                .stream()
+                .collect(Collectors.groupingBy(comment -> comment.getItem().getId(),
+                        Collectors.mapping(CommentMapper::mapCommentToDto, Collectors.toList())));
+
+        return items
+                .stream()
+                .map(item -> {
+                    List<Booking> bookingList = bookingsGroup.getOrDefault(item.getId(), Collections.emptyList());
+                    BookingDtoOut bookingLast = bookingList
+                            .stream()
+                            .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
+                            .reduce((first, second) -> second)
+                            .map(BookingMapper::mapBookingToDto)
+                            .orElse(null);
+                    BookingDtoOut bookingNext = bookingList
+                            .stream()
+                            .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
+                            .findFirst()
+                            .map(BookingMapper::mapBookingToDto)
+                            .orElse(null);
+
+                    return ItemMapper.mapItemToDto(item, bookingLast, bookingNext,
+                            commentsGroup.getOrDefault(item.getId(), Collections.emptyList())
+                    );
+                })
+                .toList();
     }
 
     @Override
