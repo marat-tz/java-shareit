@@ -13,13 +13,21 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByUserId(Long userId);
+
     @Query("select b from Booking as b where b.item.id in :itemIds")
     List<Booking> findAllByItemId(@Param("itemIds") List<Long> itemIds);
-    List<Booking> findAllByUserIdAndItemIdAndEndBefore(Long userId, Long ItemId, LocalDateTime now);
+
+    List<Booking> findAllByUserIdAndItemIdAndEndBefore(Long userId, Long itemId, LocalDateTime now);
+
     List<Booking> findAllByUserIdAndEndAfter(Long userId, LocalDateTime now);
+
     List<Booking> findAllByUserIdAndEndBefore(Long userId, LocalDateTime now);
+
     List<Booking> findAllByUserIdAndStartAfter(Long userId, LocalDateTime now);
+
     List<Booking> findAllByUserIdAndStatus(Long userId, Status status);
+
     List<Booking> findAllByItemIdAndEndBeforeAndStatusOrderByEndDesc(Long itemId, LocalDateTime now, Status status);
+
     List<Booking> findAllByItemIdAndStartAfterOrderByStartAsc(Long itemId, LocalDateTime now);
 }
