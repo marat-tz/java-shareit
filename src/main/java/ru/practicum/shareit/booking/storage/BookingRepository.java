@@ -17,6 +17,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b from Booking as b where b.item.id in :itemIds")
     List<Booking> findAllByItemId(@Param("itemIds") List<Long> itemIds);
 
+    List<Booking> findAllByItemOwnerIdOrderByStartDesc(Long ownerId);
+    List<Booking> findAllByItemOwnerIdAndStatusOrderByStartDesc(Long ownerId, Status status);
+
     List<Booking> findAllByUserIdAndItemIdAndEndBefore(Long userId, Long itemId, LocalDateTime now);
 
     List<Booking> findAllByUserIdAndEndAfter(Long userId, LocalDateTime now);

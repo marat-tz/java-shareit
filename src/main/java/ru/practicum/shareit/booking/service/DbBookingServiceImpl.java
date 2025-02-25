@@ -21,6 +21,7 @@ import ru.practicum.shareit.user.storage.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -76,6 +77,9 @@ public class DbBookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoResponse findById(Long bookingId, Long userId) {
+        userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("Пользователь " + userId + " не найден"));
+
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
                 -> new NotFoundException("Бронирование " + bookingId + " не найдено"));
         return BookingMapper.mapBookingToDto(booking);
@@ -83,8 +87,11 @@ public class DbBookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDtoResponse> findAllByUser(Long userId, State state) {
+        userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("Пользователь " + userId + " не найден"));
+
         LocalDateTime now = LocalDateTime.now();
-        List<Booking> result = switch (state) {
+        List<Booking> result =  switch (state) {
             case CURRENT -> bookingRepository.findAllByUserIdAndEndAfter(userId, now);
             case PAST -> bookingRepository.findAllByUserIdAndEndBefore(userId, now);
             case FUTURE -> bookingRepository.findAllByUserIdAndStartAfter(userId, now);
@@ -94,5 +101,33 @@ public class DbBookingServiceImpl implements BookingService {
         };
 
         return BookingMapper.mapBookingToDto(result);
+    }
+
+    @Override
+    public List<BookingDtoResponse> findAllByUserItems(Long userId, State state) {
+        userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("Пользователь " + userId + " не найден"));
+
+        List<Booking> bookings;
+
+        Status status = switch (state) {
+            case CURRENT -> Status.CURRENT;
+            case PAST -> Status.PAST;
+            case FUTURE -> Status.FUTURE;
+            case WAITING -> Status.WAITING;
+            case REJECTED -> Status.REJECTED;
+            default -> null;
+        };
+
+        if (status == null) {
+            bookings = bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId);
+        } else {
+            bookings = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, status);
+        }
+
+        return bookings
+                .stream()
+                .map(BookingMapper::mapBookingToDto)
+                .collect(Collectors.toList());
     }
 }

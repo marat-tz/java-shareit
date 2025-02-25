@@ -15,4 +15,5 @@ public interface BookingService {
     BookingDtoResponse findById(Long bookingId, Long userId);
 
     List<BookingDtoResponse> findAllByUser(Long userId, State state);
+    List<BookingDtoResponse> findAllByUserItems(Long userId, State state);
 }
