@@ -63,7 +63,7 @@ public class DbItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещь с id = " +
                 itemId + " не найдена"));
 
-        List<Booking> bookings = bookingRepository.findAllByUserIdAndItemIdAndEndBefore(userId, itemId,
+        List<Booking> bookings = bookingRepository.findAllByUserIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId,
                 LocalDateTime.now());
         if (bookings.isEmpty()) {
             throw new ValidationException("Пользователь " + userId + " не брал в аренду вещь " + itemId);
@@ -138,7 +138,7 @@ public class DbItemServiceImpl implements ItemService {
     public List<ItemDto> findByOwnerId(Long id) {
         List<Item> items = itemRepository.findByOwnerId(id);
         List<Long> itemIds = items.stream().map(Item::getId).toList();
-        List<Booking> bookings = bookingRepository.findAllByItemId(itemIds);
+        List<Booking> bookings = bookingRepository.findAllByItemIdOrderByStartDesc(itemIds);
         List<Comment> comments = commentRepository.findAllByItemId(itemIds);
 
         Map<Long, List<Booking>> bookingsGroup = bookings

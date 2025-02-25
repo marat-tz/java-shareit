@@ -92,11 +92,11 @@ public class DbBookingServiceImpl implements BookingService {
 
         LocalDateTime now = LocalDateTime.now();
         List<Booking> result =  switch (state) {
-            case CURRENT -> bookingRepository.findAllByUserIdAndEndAfter(userId, now);
-            case PAST -> bookingRepository.findAllByUserIdAndEndBefore(userId, now);
-            case FUTURE -> bookingRepository.findAllByUserIdAndStartAfter(userId, now);
-            case WAITING -> bookingRepository.findAllByUserIdAndStatus(userId, Status.WAITING);
-            case REJECTED -> bookingRepository.findAllByUserIdAndStatus(userId, Status.REJECTED);
+            case CURRENT -> bookingRepository.findAllByUserIdAndEndAfterOrderByStartDesc(userId, now);
+            case PAST -> bookingRepository.findAllByUserIdAndEndBeforeOrderByStartDesc(userId, now);
+            case FUTURE -> bookingRepository.findAllByUserIdAndStartAfterOrderByStartDesc(userId, now);
+            case WAITING -> bookingRepository.findAllByUserIdAndStatusOrderByStartDesc(userId, Status.WAITING);
+            case REJECTED -> bookingRepository.findAllByUserIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
             default -> bookingRepository.findAllByUserId(userId);
         };
 

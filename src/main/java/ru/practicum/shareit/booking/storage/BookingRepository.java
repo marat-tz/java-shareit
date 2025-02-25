@@ -15,20 +15,21 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByUserId(Long userId);
 
     @Query("select b from Booking as b where b.item.id in :itemIds")
-    List<Booking> findAllByItemId(@Param("itemIds") List<Long> itemIds);
+    List<Booking> findAllByItemIdOrderByStartDesc(@Param("itemIds") List<Long> itemIds);
 
     List<Booking> findAllByItemOwnerIdOrderByStartDesc(Long ownerId);
+
     List<Booking> findAllByItemOwnerIdAndStatusOrderByStartDesc(Long ownerId, Status status);
 
-    List<Booking> findAllByUserIdAndItemIdAndEndBefore(Long userId, Long itemId, LocalDateTime now);
+    List<Booking> findAllByUserIdAndItemIdAndEndBeforeOrderByStartDesc(Long userId, Long itemId, LocalDateTime now);
 
-    List<Booking> findAllByUserIdAndEndAfter(Long userId, LocalDateTime now);
+    List<Booking> findAllByUserIdAndEndAfterOrderByStartDesc(Long userId, LocalDateTime now);
 
-    List<Booking> findAllByUserIdAndEndBefore(Long userId, LocalDateTime now);
+    List<Booking> findAllByUserIdAndEndBeforeOrderByStartDesc(Long userId, LocalDateTime now);
 
-    List<Booking> findAllByUserIdAndStartAfter(Long userId, LocalDateTime now);
+    List<Booking> findAllByUserIdAndStartAfterOrderByStartDesc(Long userId, LocalDateTime now);
 
-    List<Booking> findAllByUserIdAndStatus(Long userId, Status status);
+    List<Booking> findAllByUserIdAndStatusOrderByStartDesc(Long userId, Status status);
 
     List<Booking> findAllByItemIdAndEndBeforeAndStatusOrderByEndDesc(Long itemId, LocalDateTime now, Status status);
 
