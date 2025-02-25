@@ -85,12 +85,12 @@ public class DbBookingServiceImpl implements BookingService {
     public List<BookingDtoResponse> findAllByUser(Long userId, State state) {
         LocalDateTime now = LocalDateTime.now();
         List<Booking> result = switch (state) {
-            case ALL -> bookingRepository.findAllByUserId(userId);
             case CURRENT -> bookingRepository.findAllByUserIdAndEndAfter(userId, now);
             case PAST -> bookingRepository.findAllByUserIdAndEndBefore(userId, now);
             case FUTURE -> bookingRepository.findAllByUserIdAndStartAfter(userId, now);
             case WAITING -> bookingRepository.findAllByUserIdAndStatus(userId, Status.WAITING);
             case REJECTED -> bookingRepository.findAllByUserIdAndStatus(userId, Status.REJECTED);
+            default -> bookingRepository.findAllByUserId(userId);
         };
 
         return BookingMapper.mapBookingToDto(result);
