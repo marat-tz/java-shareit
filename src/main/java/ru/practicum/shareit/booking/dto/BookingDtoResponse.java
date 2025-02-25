@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookingDtoOut {
+public class BookingDtoResponse {
     Long id;
     Item item;
     User booker;

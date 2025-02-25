@@ -5,15 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.enums.Status;
 import ru.practicum.shareit.booking.storage.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.dto.CommentDtoIn;
-import ru.practicum.shareit.item.dto.CommentDtoOut;
+import ru.practicum.shareit.item.dto.CommentDtoRequest;
+import ru.practicum.shareit.item.dto.CommentDtoResponse;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
@@ -56,7 +56,7 @@ public class DbItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public CommentDtoOut addComment(CommentDtoIn dto, Long itemId, Long userId) {
+    public CommentDtoResponse addComment(CommentDtoRequest dto, Long itemId, Long userId) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь " +
                 "с id = " + userId + " не найден"));
 
@@ -114,8 +114,8 @@ public class DbItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId).orElseThrow(()
                 -> new NotFoundException("Вещь " + itemId + " не найдена"));
 
-        BookingDtoOut lastBooking = null;
-        BookingDtoOut nextBooking = null;
+        BookingDtoResponse lastBooking = null;
+        BookingDtoResponse nextBooking = null;
 
         List<Booking> lastBookings = bookingRepository.findAllByItemIdAndEndBeforeAndStatusOrderByEndDesc(itemId,
                 LocalDateTime.now(), Status.APPROVED);
@@ -129,7 +129,7 @@ public class DbItemServiceImpl implements ItemService {
             nextBooking = BookingMapper.mapBookingToDto(nextBookings.get(0));
         }
 
-        List<CommentDtoOut> comments = CommentMapper.mapCommentToDto(commentRepository.findAllByItemId(itemId));
+        List<CommentDtoResponse> comments = CommentMapper.mapCommentToDto(commentRepository.findAllByItemId(itemId));
 
         return ItemMapper.mapItemToDto(item, lastBooking, nextBooking, comments);
     }
@@ -145,7 +145,7 @@ public class DbItemServiceImpl implements ItemService {
                 .stream()
                 .collect(Collectors.groupingBy(booking -> booking.getItem().getId()));
 
-        Map<Long, List<CommentDtoOut>> commentsGroup = comments
+        Map<Long, List<CommentDtoResponse>> commentsGroup = comments
                 .stream()
                 .collect(Collectors.groupingBy(comment -> comment.getItem().getId(),
                         Collectors.mapping(CommentMapper::mapCommentToDto, Collectors.toList())));
@@ -154,13 +154,13 @@ public class DbItemServiceImpl implements ItemService {
                 .stream()
                 .map(item -> {
                     List<Booking> bookingList = bookingsGroup.getOrDefault(item.getId(), Collections.emptyList());
-                    BookingDtoOut bookingLast = bookingList
+                    BookingDtoResponse bookingLast = bookingList
                             .stream()
                             .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
                             .reduce((first, second) -> second)
                             .map(BookingMapper::mapBookingToDto)
                             .orElse(null);
-                    BookingDtoOut bookingNext = bookingList
+                    BookingDtoResponse bookingNext = bookingList
                             .stream()
                             .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                             .findFirst()

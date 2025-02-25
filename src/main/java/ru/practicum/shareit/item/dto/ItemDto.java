@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 
 import java.util.List;
 
@@ -23,10 +23,10 @@ public class ItemDto {
     @NotNull
     Boolean available;
 
-    BookingDtoOut lastBooking;
+    BookingDtoResponse lastBooking;
 
-    BookingDtoOut nextBooking;
+    BookingDtoResponse nextBooking;
 
-    List<CommentDtoOut> comments;
+    List<CommentDtoResponse> comments;
 
 }

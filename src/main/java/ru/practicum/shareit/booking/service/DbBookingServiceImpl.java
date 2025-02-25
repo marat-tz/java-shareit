@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.dto.BookingDtoIn;
-import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.enums.State;
@@ -34,7 +34,7 @@ public class DbBookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public BookingDtoOut create(BookingDtoIn dto, Long userId) {
+    public BookingDtoResponse create(BookingDtoRequest dto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("Пользователь " + userId + " не найден"));
 
@@ -50,7 +50,7 @@ public class DbBookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDtoOut approve(Long bookingId, Boolean status, Long userId) {
+    public BookingDtoResponse approve(Long bookingId, Boolean status, Long userId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
                 -> new NotFoundException("Бронирование с id = " + bookingId + " не найдено"));
 
@@ -75,14 +75,14 @@ public class DbBookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDtoOut findById(Long bookingId, Long userId) {
+    public BookingDtoResponse findById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
                 -> new NotFoundException("Бронирование " + bookingId + " не найдено"));
         return BookingMapper.mapBookingToDto(booking);
     }
 
     @Override
-    public List<BookingDtoOut> findAllByUser(Long userId, State state) {
+    public List<BookingDtoResponse> findAllByUser(Long userId, State state) {
         LocalDateTime now = LocalDateTime.now();
         List<Booking> result = switch (state) {
             case ALL -> bookingRepository.findAllByUserId(userId);

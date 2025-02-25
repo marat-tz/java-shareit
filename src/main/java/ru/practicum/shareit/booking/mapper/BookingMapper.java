@@ -1,8 +1,8 @@
 package ru.practicum.shareit.booking.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.shareit.booking.dto.BookingDtoIn;
-import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.enums.Status;
 import ru.practicum.shareit.item.model.Item;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @UtilityClass
 public class BookingMapper {
-    public Booking mapDtoToNewBooking(BookingDtoIn dto, User user, Item item) {
+    public Booking mapDtoToNewBooking(BookingDtoRequest dto, User user, Item item) {
         Booking booking = new Booking();
         booking.setStatus(Status.WAITING);
         booking.setUser(user);
@@ -23,8 +23,8 @@ public class BookingMapper {
         return booking;
     }
 
-    public BookingDtoOut mapBookingToDto(Booking booking) {
-        BookingDtoOut dto = new BookingDtoOut();
+    public BookingDtoResponse mapBookingToDto(Booking booking) {
+        BookingDtoResponse dto = new BookingDtoResponse();
         dto.setId(booking.getId());
         dto.setStatus(booking.getStatus());
         dto.setBooker(booking.getUser());
@@ -34,8 +34,8 @@ public class BookingMapper {
         return dto;
     }
 
-    public static List<BookingDtoOut> mapBookingToDto(Iterable<Booking> bookings) {
-        List<BookingDtoOut> dtos = new ArrayList<>();
+    public static List<BookingDtoResponse> mapBookingToDto(Iterable<Booking> bookings) {
+        List<BookingDtoResponse> dtos = new ArrayList<>();
         for (Booking booking : bookings) {
             dtos.add(mapBookingToDto(booking));
         }
