@@ -1,75 +1,61 @@
 package ru.practicum.shareit.item.mapper;
 
 import lombok.experimental.UtilityClass;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
+import ru.practicum.shareit.item.dto.CommentDtoResponse;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @UtilityClass
 public class ItemMapper {
     public Item mapDtoToItem(ItemDto dto) {
-        return Item.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .available(dto.getAvailable())
-                .build();
+        Item item = new Item();
+        item.setName(dto.getName());
+        item.setDescription(dto.getDescription());
+        item.setAvailable(dto.getAvailable());
+        return item;
+    }
+
+    public Item mapDtoToItem(ItemDto dto, User owner) {
+        Item item = new Item();
+        item.setOwner(owner);
+        item.setName(dto.getName());
+        item.setDescription(dto.getDescription());
+        item.setAvailable(dto.getAvailable());
+        return item;
     }
 
     public ItemDto mapItemToDto(Item item) {
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
+        ItemDto dto = new ItemDto();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        dto.setAvailable(item.getAvailable());
+        return dto;
     }
 
-    public Item mapNewItemAllFields(Item item, ItemDto dto) {
-        return Item.builder()
-                .id(item.getId())
-                .owner(item.getOwner())
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .available(dto.getAvailable())
-                .build();
+    public ItemDto mapItemToDto(Item item, BookingDtoResponse lastBooking, BookingDtoResponse nextBooking,
+                                List<CommentDtoResponse> comments) {
+        ItemDto dto = new ItemDto();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        dto.setAvailable(item.getAvailable());
+        dto.setLastBooking(lastBooking);
+        dto.setNextBooking(nextBooking);
+        dto.setComments(comments);
+        return dto;
     }
 
-    public Item mapNewItemNameDescription(Item item, ItemDto dto) {
-        return Item.builder()
-                .id(item.getId())
-                .owner(item.getOwner())
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .available(item.getAvailable())
-                .build();
-    }
-
-    public Item mapNewItemName(Item item, ItemDto dto) {
-        return Item.builder()
-                .id(item.getId())
-                .owner(item.getOwner())
-                .name(dto.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
-    }
-
-    public Item mapNewItemAvailable(Item item, ItemDto dto) {
-            return Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(item.getName())
-                    .description(item.getDescription())
-                    .available(dto.getAvailable())
-                    .build();
+    public static List<ItemDto> mapItemToDto(Iterable<Item> items) {
+        List<ItemDto> dtos = new ArrayList<>();
+        for (Item item : items) {
+            dtos.add(mapItemToDto(item));
         }
-
-    public Item mapNewItemDescription(Item item, ItemDto dto) {
-            return Item.builder()
-                    .id(item.getId())
-                    .owner(item.getOwner())
-                    .name(item.getName())
-                    .description(dto.getDescription())
-                    .available(item.getAvailable())
-                    .build();
-        }
+        return dtos;
+    }
 }

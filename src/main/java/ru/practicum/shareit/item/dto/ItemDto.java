@@ -2,11 +2,15 @@ package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Value;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 
-@Value
-@Builder(toBuilder = true)
+import java.util.List;
+
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemDto {
     Long id;
 
@@ -18,4 +22,11 @@ public class ItemDto {
 
     @NotNull
     Boolean available;
+
+    BookingDtoResponse lastBooking;
+
+    BookingDtoResponse nextBooking;
+
+    List<CommentDtoResponse> comments;
+
 }
