@@ -3,7 +3,8 @@ package ru.practicum.shareit.item.mapper;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.item.dto.CommentDtoResponse;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoRequest;
+import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 @UtilityClass
 public class ItemMapper {
-    public Item mapDtoToItem(ItemDto dto) {
+    public Item mapDtoToItem(ItemDtoRequest dto) {
         Item item = new Item();
         item.setName(dto.getName());
         item.setDescription(dto.getDescription());
@@ -20,7 +21,7 @@ public class ItemMapper {
         return item;
     }
 
-    public Item mapDtoToItem(ItemDto dto, User owner) {
+    public Item mapDtoToItem(ItemDtoRequest dto, User owner) {
         Item item = new Item();
         item.setOwner(owner);
         item.setName(dto.getName());
@@ -29,8 +30,8 @@ public class ItemMapper {
         return item;
     }
 
-    public ItemDto mapItemToDto(Item item) {
-        ItemDto dto = new ItemDto();
+    public ItemDtoResponse mapItemToDto(Item item) {
+        ItemDtoResponse dto = new ItemDtoResponse();
         dto.setId(item.getId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
@@ -38,9 +39,9 @@ public class ItemMapper {
         return dto;
     }
 
-    public ItemDto mapItemToDto(Item item, BookingDtoResponse lastBooking, BookingDtoResponse nextBooking,
-                                List<CommentDtoResponse> comments) {
-        ItemDto dto = new ItemDto();
+    public ItemDtoResponse mapItemToDto(Item item, BookingDtoResponse lastBooking, BookingDtoResponse nextBooking,
+                                       List<CommentDtoResponse> comments) {
+        ItemDtoResponse dto = new ItemDtoResponse();
         dto.setId(item.getId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
@@ -51,8 +52,8 @@ public class ItemMapper {
         return dto;
     }
 
-    public static List<ItemDto> mapItemToDto(Iterable<Item> items) {
-        List<ItemDto> dtos = new ArrayList<>();
+    public static List<ItemDtoResponse> mapItemToDto(Iterable<Item> items) {
+        List<ItemDtoResponse> dtos = new ArrayList<>();
         for (Item item : items) {
             dtos.add(mapItemToDto(item));
         }

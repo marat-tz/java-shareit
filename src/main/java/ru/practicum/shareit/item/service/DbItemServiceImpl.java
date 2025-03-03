@@ -14,7 +14,8 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDtoRequest;
 import ru.practicum.shareit.item.dto.CommentDtoResponse;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoRequest;
+import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
@@ -45,7 +46,7 @@ public class DbItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto create(ItemDto dto, Long userId) {
+    public ItemDtoResponse create(ItemDtoRequest dto, Long userId) {
         log.info("Добавление вещи {} пользователем {}", dto.getName(), userId);
         User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь " +
                 "с id = " + userId + " не найден"));
@@ -75,7 +76,7 @@ public class DbItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto update(ItemDto dto, Long id, Long userId) {
+    public ItemDtoResponse update(ItemDtoRequest dto, Long id, Long userId) {
         log.info("Обновление вещи с id = {}, пользователь = {}, dto.name = {}, dto.description = {}, " +
                 "dto.available = {}", id, userId, dto.getName(), dto.getDescription(), dto.getAvailable());
 
@@ -110,7 +111,7 @@ public class DbItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto findById(Long itemId) {
+    public ItemDtoResponse findById(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(()
                 -> new NotFoundException("Вещь " + itemId + " не найдена"));
 
@@ -135,7 +136,7 @@ public class DbItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> findByOwnerId(Long id) {
+    public List<ItemDtoResponse> findByOwnerId(Long id) {
         List<Item> items = itemRepository.findByOwnerId(id);
         List<Long> itemIds = items.stream().map(Item::getId).toList();
         List<Booking> bookings = bookingRepository.findAllByItemIdOrderByStartDesc(itemIds);
@@ -175,7 +176,7 @@ public class DbItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> findByText(String text) {
+    public List<ItemDtoResponse> findByText(String text) {
         log.info("Поиск вещи по тексту: {}", text);
 
         if (text.isBlank()) {
