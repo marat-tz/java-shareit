@@ -2,6 +2,7 @@ package ru.practicum.shareit.request;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,8 +27,19 @@ public class ItemRequestController {
         return itemRequestService.create(dto, userId);
     }
 
-//    @GetMapping
-//    public List<ItemRequestDtoResponse> findUserRequests
+    @GetMapping
+    public List<ItemRequestDtoResponse> findUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        return itemRequestService.findUserRequests(userId);
+    }
+
+    @GetMapping("/all")
+    public List<ItemRequestDtoResponse> findAllRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        return itemRequestService.findAllRequests(userId);
+    }
+
+
+
+
 
 
 }

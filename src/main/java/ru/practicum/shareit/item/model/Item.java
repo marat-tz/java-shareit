@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 @Entity
@@ -37,4 +38,8 @@ public class Item {
 
     @Column(nullable = false)
     Boolean available;
+
+    @ManyToOne
+    @JoinColumn(name = "request_id")
+    ItemRequest request;
 }
