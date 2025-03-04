@@ -14,4 +14,5 @@ public class ItemDtoRequestResponse {
     String name;
     String description;
     Long ownerId;
+    Long requestId;
 }

@@ -7,6 +7,7 @@ import ru.practicum.shareit.item.dto.ItemDtoRequest;
 import ru.practicum.shareit.item.dto.ItemDtoRequestResponse;
 import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
@@ -22,12 +23,13 @@ public class ItemMapper {
         return item;
     }
 
-    public Item mapDtoToItem(ItemDtoRequest dto, User owner) {
+    public Item mapDtoToItem(ItemDtoRequest dto, User owner, ItemRequest request) {
         Item item = new Item();
         item.setOwner(owner);
         item.setName(dto.getName());
         item.setDescription(dto.getDescription());
         item.setAvailable(dto.getAvailable());
+        item.setRequest(request);
         return item;
     }
 

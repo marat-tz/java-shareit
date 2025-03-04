@@ -22,6 +22,8 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.CommentRepository;
 import ru.practicum.shareit.item.storage.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.storage.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserRepository;
 
@@ -43,6 +45,7 @@ public class DbItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository requestRepository;
 
     @Override
     @Transactional
@@ -50,7 +53,13 @@ public class DbItemServiceImpl implements ItemService {
         log.info("Добавление вещи {} пользователем {}", dto.getName(), userId);
         User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь " +
                 "с id = " + userId + " не найден"));
-        Item item = itemRepository.save(ItemMapper.mapDtoToItem(dto, owner));
+        ItemRequest request = null;
+
+        if (Objects.nonNull(dto.getRequestId())) {
+            request = requestRepository.findById(dto.getRequestId()).orElse(null);
+        }
+
+        Item item = itemRepository.save(ItemMapper.mapDtoToItem(dto, owner, request));
         log.info("Вещь {} создана", item);
         return ItemMapper.mapItemToDto(item);
     }

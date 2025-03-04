@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -15,7 +14,10 @@ import ru.practicum.shareit.request.storage.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +52,22 @@ public class DbItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDtoResponse> findAllRequests(Long userId) {
-        return null;
+        List<ItemRequest> itemRequests = itemRequestRepository.findByOwnerIdNot(userId);
+        return ItemRequestMapper.toDto(itemRequests);
     }
 
+
+    @Override
+    public ItemRequestDtoResponse findRequestById(Long requestId, Long userId) {
+        userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("Пользователь " + userId + " не найден"));
+
+        ItemRequest itemRequest = itemRequestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException("Запрос с id = " + requestId + " не найден"));
+
+        List<Item> allItems = itemRepository.findAllByRequestId(List.of(requestId));
+
+        return ItemRequestMapper.toDto(itemRequest, allItems);
+    }
 
 }
