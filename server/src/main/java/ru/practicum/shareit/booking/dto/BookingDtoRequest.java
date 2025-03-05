@@ -1,11 +1,12 @@
 package ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.checkerframework.checker.optional.qual.Present;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,7 @@ public class BookingDtoRequest {
     Long itemId;
 
     @NotNull
-    @Present // не тот Present
+    @FutureOrPresent
     LocalDateTime start;
 
     @NotNull
