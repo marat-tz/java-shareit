@@ -41,10 +41,10 @@ public class UserClient extends BaseClient {
     }
 
     public ResponseEntity<Object> update(UserDto dto, Long userId) {
-        return post("/", userId, dto);
+        return patch("/" + userId, dto);
     }
 
     public void delete(Long userId) {
-        delete("/", userId);
+        delete("", userId);
     }
 }
