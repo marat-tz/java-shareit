@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
