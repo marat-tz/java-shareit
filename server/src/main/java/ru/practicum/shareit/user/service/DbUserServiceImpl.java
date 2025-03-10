@@ -65,8 +65,8 @@ public class DbUserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(Long id) {
-        // TODO: настроить выкидывание NotFoundException (если нужно)
-        User user = repository.findById(id).orElseThrow();
+        User user = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Пользователь " + id + " не найден"));
         return UserMapper.mapUserToDto(user);
     }
 }
