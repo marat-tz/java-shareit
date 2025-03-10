@@ -8,9 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,11 +15,9 @@ import ru.practicum.shareit.user.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -125,7 +120,8 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect((result -> {
                     String json = result.getResponse().getContentAsString();
-                    List<UserDto> dtos = mapper.readValue(json, new TypeReference<List<UserDto>>() {});
+                    List<UserDto> dtos = mapper.readValue(json, new TypeReference<>() {
+                    });
                     if (dtos.isEmpty()) {
                         throw new AssertionError("Empty UserDto list");
                     }
