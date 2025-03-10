@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.ShareItServer;
+import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
@@ -52,12 +53,28 @@ public class DbUserServiceImplTest {
     }
 
     @Test
+    void update_shouldNotUpdateUserEmailConflict() {
+        userService.create(userDtoRequest1);
+        UserDto userDtoResponse2 = userService.create(userDtoRequest2);
+
+        UserDto updateDto = new UserDto(null, userDtoRequest1.getEmail(), "test");
+
+        Assertions.assertThatThrownBy(() -> {
+            userService.update(updateDto, userDtoResponse2.getId());
+        }).isInstanceOf(ConflictException.class);
+    }
+
+    @Test
     void delete_shouldDeleteUser() {
         UserDto userDtoResponse1 = userService.create(userDtoRequest1);
+        UserDto findUserDto = userService.findById(userDtoResponse1.getId());
+
+        Assertions.assertThat(userDtoResponse1.getId()).isEqualTo(findUserDto.getId());
+
         userService.delete(userDtoResponse1.getId());
 
         Assertions.assertThatThrownBy(() -> {
-            throw new NotFoundException("Пользователь " + userDtoResponse1.getId() + " не найден");
+            userService.findById(userDtoResponse1.getId());
         }).isInstanceOf(NotFoundException.class);
     }
 
