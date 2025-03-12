@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.item.dto.CommentDtoResponse;
 import ru.practicum.shareit.item.dto.ItemDtoRequest;
-import ru.practicum.shareit.item.dto.ItemDtoRequestResponse;
+import ru.practicum.shareit.item.dto.ItemDtoRequestIdResponse;
 import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -63,8 +63,8 @@ public class ItemMapper {
         return dtos;
     }
 
-    public ItemDtoRequestResponse mapItemToDtoRequest(Item item) {
-        ItemDtoRequestResponse dto = new ItemDtoRequestResponse();
+    public ItemDtoRequestIdResponse mapItemToDtoRequest(Item item) {
+        ItemDtoRequestIdResponse dto = new ItemDtoRequestIdResponse();
         dto.setId(item.getId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
@@ -72,8 +72,8 @@ public class ItemMapper {
         return dto;
     }
 
-    public static List<ItemDtoRequestResponse> mapItemToDtoRequest(Iterable<Item> items) {
-        List<ItemDtoRequestResponse> dtos = new ArrayList<>();
+    public static List<ItemDtoRequestIdResponse> mapItemToDtoRequest(Iterable<Item> items) {
+        List<ItemDtoRequestIdResponse> dtos = new ArrayList<>();
         for (Item item : items) {
             dtos.add(mapItemToDtoRequest(item));
         }

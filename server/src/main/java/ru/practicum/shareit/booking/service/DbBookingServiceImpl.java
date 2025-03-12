@@ -55,10 +55,11 @@ public class DbBookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
                 -> new NotFoundException("Бронирование с id = " + bookingId + " не найдено"));
 
-        Long itemId = booking.getItem().getOwner().getId();
+        Long ownerId = booking.getItem().getOwner().getId();
 
-        if (!Objects.equals(itemId, userId)) {
-            throw new ValidationException("Пользователь " + userId + " не является владельцем вещи " + itemId);
+        if (!Objects.equals(ownerId, userId)) {
+            throw new ValidationException("Пользователь " + userId + " не является владельцем вещи " +
+                    booking.getItem().getId());
         }
 
         if (!Objects.equals(booking.getStatus(), Status.WAITING)) {

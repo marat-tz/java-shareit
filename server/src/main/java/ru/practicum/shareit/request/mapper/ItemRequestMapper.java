@@ -2,7 +2,7 @@ package ru.practicum.shareit.request.mapper;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import ru.practicum.shareit.item.dto.ItemDtoRequestResponse;
+import ru.practicum.shareit.item.dto.ItemDtoRequestIdResponse;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
@@ -45,7 +45,7 @@ public class ItemRequestMapper {
 
     public ItemRequestDtoResponse toDto(ItemRequest request, List<Item> items) {
         log.info("МАППЕР, request = {}, items = {}", request, items);
-        List<ItemDtoRequestResponse> resultItems = ItemMapper.mapItemToDtoRequest(
+        List<ItemDtoRequestIdResponse> resultItems = ItemMapper.mapItemToDtoRequest(
                 items.stream().filter(item -> Objects.equals(item.getRequest(), request)).toList());
         ItemRequestDtoResponse dto = new ItemRequestDtoResponse();
         dto.setId(request.getId());
