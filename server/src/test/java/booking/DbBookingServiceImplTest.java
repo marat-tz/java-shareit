@@ -79,9 +79,8 @@ public class DbBookingServiceImplTest {
         BookingDtoRequest bookingDtoRequest = new BookingDtoRequest(itemDtoResponse.getId(),
                 LocalDateTime.now().minusHours(1), LocalDateTime.now().minusMinutes(30));
 
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.create(bookingDtoRequest, 2L);
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.create(bookingDtoRequest, 2L)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -90,9 +89,9 @@ public class DbBookingServiceImplTest {
         BookingDtoRequest bookingDtoRequest = new BookingDtoRequest(2L,
                 LocalDateTime.now().minusHours(1), LocalDateTime.now().minusMinutes(30));
 
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.create(bookingDtoRequest, userDtoResponse.getId());
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.create(bookingDtoRequest, userDtoResponse.getId()))
+                .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -104,9 +103,9 @@ public class DbBookingServiceImplTest {
         BookingDtoRequest bookingDtoRequest = new BookingDtoRequest(itemDtoResponse.getId(),
                 LocalDateTime.now().minusHours(1), LocalDateTime.now().minusMinutes(30));
 
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.create(bookingDtoRequest, userDtoResponse.getId());
-        }).isInstanceOf(ValidationException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.create(bookingDtoRequest, userDtoResponse.getId()))
+                .isInstanceOf(ValidationException.class);
     }
 
     @Test
@@ -143,9 +142,9 @@ public class DbBookingServiceImplTest {
     void approve_shouldNotApproveNoBooking() {
         UserDto userDtoResponse = userService.create(userDtoRequest1);
 
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.approve(1L, true, userDtoResponse.getId());
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.approve(1L, true, userDtoResponse.getId()))
+                .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -157,9 +156,9 @@ public class DbBookingServiceImplTest {
                 LocalDateTime.now().minusHours(1), LocalDateTime.now().minusMinutes(30));
         BookingDtoResponse bookingDtoResponse = bookingService.create(bookingDtoRequest, userDtoResponse2.getId());
 
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.approve(bookingDtoResponse.getId(), true, userDtoResponse2.getId());
-        }).isInstanceOf(ValidationException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.approve(bookingDtoResponse.getId(), true, userDtoResponse2.getId()))
+                .isInstanceOf(ValidationException.class);
     }
 
     @Test
@@ -186,18 +185,16 @@ public class DbBookingServiceImplTest {
                 LocalDateTime.now().minusHours(1), LocalDateTime.now().minusMinutes(30));
         BookingDtoResponse bookingDtoResponse = bookingService.create(bookingDtoRequest, userDtoResponse.getId());
 
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.findById(bookingDtoResponse.getId(), 2L);
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.findById(bookingDtoResponse.getId(), 2L)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
     void findById_shouldNotFindBookingByIdNoBooking() {
         UserDto userDtoResponse = userService.create(userDtoRequest1);
 
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.findById(2L, userDtoResponse.getId());
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.findById(2L, userDtoResponse.getId())).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -290,9 +287,8 @@ public class DbBookingServiceImplTest {
 
     @Test
     void findAllByUser_shouldNotFindNoUser() {
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.findAllByUser(1L, State.ALL);
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.findAllByUser(1L, State.ALL)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -319,35 +315,10 @@ public class DbBookingServiceImplTest {
         Assertions.assertThat(bookings.size()).isEqualTo(3);
     }
 
-//    @Test
-//    void findAllByUserItems_shouldFindAllByItemsCurrent() {
-//        UserDto userDtoResponse1 = userService.create(userDtoRequest1);
-//        UserDto userDtoResponse2 = userService.create(userDtoRequest2);
-//        ItemDtoResponse itemDtoResponse1 = itemService.create(itemDtoRequest1, userDtoResponse1.getId());
-//        ItemDtoResponse itemDtoResponse2 = itemService.create(itemDtoRequest1, userDtoResponse1.getId());
-//        ItemDtoResponse itemDtoResponse3 = itemService.create(itemDtoRequest1, userDtoResponse1.getId());
-//
-//        BookingDtoRequest bookingDtoRequest1 = new BookingDtoRequest(itemDtoResponse1.getId(),
-//                LocalDateTime.now().minusHours(2), LocalDateTime.now().plusMinutes(10));
-//        BookingDtoRequest bookingDtoRequest2 = new BookingDtoRequest(itemDtoResponse2.getId(),
-//                LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
-//        BookingDtoRequest bookingDtoRequest3 = new BookingDtoRequest(itemDtoResponse3.getId(),
-//                LocalDateTime.now().minusHours(10), LocalDateTime.now().minusHours(9));
-//
-//        bookingService.create(bookingDtoRequest1, userDtoResponse2.getId());
-//        bookingService.create(bookingDtoRequest2, userDtoResponse2.getId());
-//        bookingService.create(bookingDtoRequest3, userDtoResponse2.getId());
-//
-//        List<BookingDtoResponse> bookings = bookingService.findAllByUserItems(userDtoResponse1.getId(), State.CURRENT);
-//
-//        Assertions.assertThat(bookings.size()).isEqualTo(2);
-//    }
-
     @Test
     void findAllByUserItems_shouldNotFindNoUser() {
-        Assertions.assertThatThrownBy(() -> {
-            bookingService.findAllByUserItems(1L, State.ALL);
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                bookingService.findAllByUserItems(1L, State.ALL)).isInstanceOf(NotFoundException.class);
     }
 
 }

@@ -20,7 +20,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,37 +43,23 @@ public class ItemControllerTest {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Mock
-    UserService userService;
-
-    @Mock
     ItemService itemService;
-
-    private MockMvc mvc;
 
     @InjectMocks
     private ItemController itemController;
 
+    private MockMvc mvc;
     private UserDto userDto;
-
     private ItemDtoResponse itemDtoResponse;
-
     private ItemDtoRequest itemDtoRequest;
-
     private Item item;
-
-    private User user;
-
     private CommentDtoResponse commentDtoResponse;
-
     private CommentDtoRequest commentDtoRequest;
-
-    private LocalDateTime now;
-
 
 
     @BeforeEach
     void setUp() {
-        now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
 
         mvc = MockMvcBuilders
                 .standaloneSetup(itemController)
@@ -87,7 +72,7 @@ public class ItemControllerTest {
         itemDtoResponse = new ItemDtoResponse(1L, "name", "desc", true,
                 null, null, null);
 
-        user = new User(1L, "email@mail.com", "name");
+        User user = new User(1L, "email@mail.com", "name");
         item = new Item(1L, user, "name", "desc", true, null);
 
         commentDtoRequest = new CommentDtoRequest("desc");

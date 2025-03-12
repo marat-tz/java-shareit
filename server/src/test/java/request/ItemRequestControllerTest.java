@@ -18,8 +18,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoResponse;
 import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.dto.UserDto;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,31 +43,22 @@ public class ItemRequestControllerTest {
 
     private UserDto userDto;
 
-    private ItemDtoRequestIdResponse requestIdResponse;
-
     private ItemRequestDtoResponse dtoResponse;
 
     private ItemRequestDtoRequest dtoRequest;
 
-    private LocalDateTime date;
-    private String stringDate;
-
     @BeforeEach
     void setUp() {
-        date = LocalDateTime.of(1900, 12, 11, 12, 0);
-        stringDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
         mvc = MockMvcBuilders
                 .standaloneSetup(controller)
                 .build();
 
         userDto = new UserDto(1L, "test@test.com", "test");
 
-        requestIdResponse = new ItemDtoRequestIdResponse(1L, "name", "desc", 1L, 1L);
+        ItemDtoRequestIdResponse requestIdResponse = new ItemDtoRequestIdResponse(1L, "name", "desc", 1L, 1L);
 
         dtoResponse = new ItemRequestDtoResponse(1L, "desc", null, List.of(requestIdResponse));
         dtoRequest = new ItemRequestDtoRequest("desc");
-
     }
 
     @Test
