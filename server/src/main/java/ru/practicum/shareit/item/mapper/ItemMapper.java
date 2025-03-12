@@ -15,13 +15,6 @@ import java.util.List;
 
 @UtilityClass
 public class ItemMapper {
-    public Item mapDtoToItem(ItemDtoRequest dto) {
-        Item item = new Item();
-        item.setName(dto.getName());
-        item.setDescription(dto.getDescription());
-        item.setAvailable(dto.getAvailable());
-        return item;
-    }
 
     public Item mapDtoToItem(ItemDtoRequest dto, User owner, ItemRequest request) {
         Item item = new Item();
