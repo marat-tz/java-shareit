@@ -65,6 +65,35 @@ public class DbUserServiceImplTest {
     }
 
     @Test
+    void update_shouldNotUpdateNotUser() {
+        UserDto updateDto = new UserDto(null, userDtoRequest1.getEmail(), "test");
+
+        Assertions.assertThatThrownBy(() -> {
+            userService.update(updateDto, 1L);
+        }).isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    void update_shouldNotUpdateNameIfNullName() {
+        UserDto userDtoResponse1 = userService.create(userDtoRequest1);
+        UserDto userDtoRequestNullName = new UserDto(null, "user2@test.com", null);
+        UserDto userDtoResponse2 = userService.update(userDtoRequestNullName, userDtoResponse1.getId());
+
+        Assertions.assertThat(userDtoResponse2.getEmail()).isEqualTo(userDtoRequest2.getEmail());
+        Assertions.assertThat(userDtoResponse2.getName()).isEqualTo(userDtoRequest1.getName());
+    }
+
+    @Test
+    void update_shouldNotUpdateNameIfNullEmail() {
+        UserDto userDtoResponse1 = userService.create(userDtoRequest1);
+        UserDto userDtoRequestNullName = new UserDto(null, null, "user2");
+        UserDto userDtoResponse2 = userService.update(userDtoRequestNullName, userDtoResponse1.getId());
+
+        Assertions.assertThat(userDtoResponse2.getEmail()).isEqualTo(userDtoRequest1.getEmail());
+        Assertions.assertThat(userDtoResponse2.getName()).isEqualTo(userDtoRequest2.getName());
+    }
+
+    @Test
     void delete_shouldDeleteUser() {
         UserDto userDtoResponse1 = userService.create(userDtoRequest1);
         UserDto findUserDto = userService.findById(userDtoResponse1.getId());
