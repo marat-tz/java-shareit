@@ -1,5 +1,7 @@
 package ru.practicum.shareit.request.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,5 +13,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemRequestDtoRequest {
+
+    @NotBlank
+    @Size(max = 255, message = "Запрос не должен превышать 255 символов")
     String description;
+
 }
