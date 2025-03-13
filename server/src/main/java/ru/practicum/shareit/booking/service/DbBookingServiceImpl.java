@@ -78,8 +78,9 @@ public class DbBookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoResponse findById(Long bookingId, Long userId) {
-        userRepository.findById(userId).orElseThrow(()
-                -> new NotFoundException("Пользователь " + userId + " не найден"));
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("Пользователь " + userId + " не найден");
+        }
 
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
                 -> new NotFoundException("Бронирование " + bookingId + " не найдено"));
@@ -88,8 +89,9 @@ public class DbBookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDtoResponse> findAllByUser(Long userId, State state) {
-        userRepository.findById(userId).orElseThrow(()
-                -> new NotFoundException("Пользователь " + userId + " не найден"));
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("Пользователь " + userId + " не найден");
+        }
 
         LocalDateTime now = LocalDateTime.now();
         List<Booking> result =  switch (state) {
@@ -106,8 +108,9 @@ public class DbBookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDtoResponse> findAllByUserItems(Long userId, State state) {
-        userRepository.findById(userId).orElseThrow(()
-                -> new NotFoundException("Пользователь " + userId + " не найден"));
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("Пользователь " + userId + " не найден");
+        }
 
         List<Booking> bookings;
 
