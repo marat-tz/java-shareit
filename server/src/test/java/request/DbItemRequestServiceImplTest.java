@@ -2,6 +2,7 @@ package request;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.util.List;
 @SpringBootTest(classes = ShareItServer.class)
 @ActiveProfiles("test")
 @Transactional
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DbItemRequestServiceImplTest {
 
@@ -53,28 +55,29 @@ public class DbItemRequestServiceImplTest {
 
     @Test
     void create_shouldNotCreateNotUser() {
-        Assertions.assertThatThrownBy(() -> {
-            itemRequestService.create(itemRequestDtoRequest, 1L);
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                itemRequestService.create(itemRequestDtoRequest, 1L)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
     void findUserRequests_shouldFindUserRequests() {
         UserDto userDtoResponse = userService.create(userDtoRequest1);
-        itemRequestService.create(itemRequestDtoRequest, userDtoResponse.getId());
-        itemRequestService.create(itemRequestDtoRequest, userDtoResponse.getId());
-        itemRequestService.create(itemRequestDtoRequest, userDtoResponse.getId());
+        ItemRequestDtoResponse request1 = itemRequestService.create(itemRequestDtoRequest, userDtoResponse.getId());
+        ItemRequestDtoResponse request2 = itemRequestService.create(itemRequestDtoRequest, userDtoResponse.getId());
+        ItemRequestDtoResponse request3 = itemRequestService.create(itemRequestDtoRequest, userDtoResponse.getId());
 
         List<ItemRequestDtoResponse> requests = itemRequestService.findUserRequests(userDtoResponse.getId());
 
         Assertions.assertThat(requests.size()).isEqualTo(3);
+        Assertions.assertThat(requests.get(0).getId()).isEqualTo(request3.getId());
+        Assertions.assertThat(requests.get(1).getId()).isEqualTo(request2.getId());
+        Assertions.assertThat(requests.get(2).getId()).isEqualTo(request1.getId());
     }
 
     @Test
     void findUserRequests_shouldNotFindNotUser() {
-        Assertions.assertThatThrownBy(() -> {
-            itemRequestService.findUserRequests(1L);
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                itemRequestService.findUserRequests(1L)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -109,18 +112,18 @@ public class DbItemRequestServiceImplTest {
         ItemRequestDtoResponse itemRequestDtoResponse = itemRequestService
                 .create(itemRequestDtoRequest, userDtoResponse.getId());
 
-        Assertions.assertThatThrownBy(() -> {
-            itemRequestService.findRequestById(itemRequestDtoResponse.getId(), 2L);
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                itemRequestService.findRequestById(itemRequestDtoResponse.getId(), 2L))
+                .isInstanceOf(NotFoundException.class);
     }
 
     @Test
     void findRequestById_shouldNotFindRequestByIdNoRequest() {
         UserDto userDtoResponse = userService.create(userDtoRequest1);
 
-        Assertions.assertThatThrownBy(() -> {
-            itemRequestService.findRequestById(2L, userDtoResponse.getId());
-        }).isInstanceOf(NotFoundException.class);
+        Assertions.assertThatThrownBy(() ->
+                itemRequestService.findRequestById(2L, userDtoResponse.getId()))
+                .isInstanceOf(NotFoundException.class);
     }
 
 }

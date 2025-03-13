@@ -8,8 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> {
-    List<ItemRequest> findAllByOwnerId(Long ownerId);
+    List<ItemRequest> findAllByOwnerIdOrderByCreatedDesc(Long ownerId);
 
-    List<ItemRequest> findByOwnerIdNot(Long ownerId);
+    List<ItemRequest> findByOwnerIdNotOrderByCreatedDesc(Long ownerId);
 
 }

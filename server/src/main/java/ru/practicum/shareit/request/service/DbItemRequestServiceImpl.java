@@ -41,7 +41,7 @@ public class DbItemRequestServiceImpl implements ItemRequestService {
             throw new NotFoundException("Пользователь " + userId + " не найден");
         }
 
-        List<ItemRequest> requests = itemRequestRepository.findAllByOwnerId(userId);
+        List<ItemRequest> requests = itemRequestRepository.findAllByOwnerIdOrderByCreatedDesc(userId);
         List<Long> requestIds = requests.stream().map(ItemRequest::getId).toList();
         List<Item> allItems = itemRepository.findAllByRequestId(requestIds);
 
@@ -50,7 +50,7 @@ public class DbItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDtoResponse> findAllRequests(Long userId) {
-        List<ItemRequest> itemRequests = itemRequestRepository.findByOwnerIdNot(userId);
+        List<ItemRequest> itemRequests = itemRequestRepository.findByOwnerIdNotOrderByCreatedDesc(userId);
         return ItemRequestMapper.toDto(itemRequests);
     }
 
